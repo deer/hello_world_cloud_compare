@@ -3,3 +3,4 @@ services:
     name: baabe-hello
     env: docker
     autoDeploy: false
+    plan: free
