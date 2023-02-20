@@ -4,4 +4,4 @@ export default function serve() {
       );
 }
 
-export const config = { path: "/serve" }
+export const config = { path: "/" }
