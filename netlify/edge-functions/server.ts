@@ -1,6 +1,6 @@
 export default function serve() {
     return new Response(
-        `Hello from deno.`,
+        `Hello from deno!`,
       );
 }
 
