@@ -45,8 +45,8 @@ export async function handle(
     console.log(connInfo);
   }
 
-  const proxiedServerIp = req.headers.get("proxied.server.ip") || "";
-  const proxiedRequesterIp = req.headers.get("proxied.requester.ip") || "";
+  const proxiedServerIp = req.headers.get("x-proxied-server-ip") || "";
+  const proxiedRequesterIp = req.headers.get("x-proxied-requester-ip") || "";
   const requesterIp = getRequesterIp(req, connInfo, proxiedServerIp, proxiedRequesterIp);
 
   await postNewConnection(requesterIp, envs);
