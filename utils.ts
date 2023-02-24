@@ -90,7 +90,8 @@ function getRequesterIp(req: Request, connInfo: ConnInfo, proxiedServerIp: strin
   }
   const forwardedHost = req.headers.get("x-forwarded-for") || "";
   const hostnameFromForwarded = forwardedHost.split(",")[0];
-  const host = hostnameFromForwarded != "" && hostnameFromForwarded != "::1" ? hostnameFromForwarded : hostnameFromAddress;
+  let host = hostnameFromForwarded != "" && hostnameFromForwarded != "::1" ? hostnameFromForwarded : hostnameFromAddress;
+  host = proxiedRequesterIp != "" ? proxiedRequesterIp : host;
   console.log({ proxiedServerIp, proxiedRequesterIp, serverFromAddress });
   console.log({ hostnameFromAddress, forwardedHost, hostnameFromForwarded, host });
   return host;
