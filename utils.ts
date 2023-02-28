@@ -48,8 +48,9 @@ export async function handle(
   const proxiedServerIp = req.headers.get("x-proxied-server-ip") || "";
   const proxiedRequesterIp = req.headers.get("x-proxied-requester-ip") || "";
   const requesterIp = getRequesterIp(req, connInfo, proxiedServerIp, proxiedRequesterIp);
+  const isProxy = proxiedRequesterIp != "" ? true : false;
 
-  await postNewConnection(requesterIp, envs);
+  await postNewConnection(requesterIp, envs, isProxy);
   const result = await getConnectionRecords(envs) as resultSchema;
 
   const personalVisits = result.documents.find((x) => x._id === requesterIp)?.visitsPerHost || 0;
@@ -99,7 +100,7 @@ function getRequesterIp(req: Request, connInfo: ConnInfo, proxiedServerIp: strin
 
 
 
-const postNewConnection = async (host: string, envs: ReturnType<typeof getEnvs>) => {
+const postNewConnection = async (host: string, envs: ReturnType<typeof getEnvs>, isProxy: boolean) => {
   const options = {
     method: "POST",
     headers: {
@@ -115,7 +116,7 @@ const postNewConnection = async (host: string, envs: ReturnType<typeof getEnvs>)
       dataSource: envs.DATA_SOURCE,
       database: envs.DB_NAME,
       collection: envs.COLLECTION_NAME,
-      document: { host: host, platform: envs.HOSTING_SERVICE },
+      document: { host: host, platform: envs.HOSTING_SERVICE, proxy: isProxy },
     };
     options.body = JSON.stringify(query);
     const dataResponse = await fetch(URI, options);
